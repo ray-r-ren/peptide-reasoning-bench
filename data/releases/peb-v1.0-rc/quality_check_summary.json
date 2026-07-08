@@ -1,0 +1,16 @@
+{
+  "actions": {
+    "kept": 525
+  },
+  "below_minimum": {},
+  "case_counts": {
+    "binding_rank": 25,
+    "human_effect": 200,
+    "pose": 100,
+    "structure": 200
+  },
+  "disagreements": 25,
+  "pass_a_records": 525,
+  "pass_b_records": 525,
+  "release_dir": "data/releases/peb-v1.0-rc"
+}

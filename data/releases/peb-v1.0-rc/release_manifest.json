@@ -1,0 +1,93 @@
+{
+  "benchmark_abbreviation": "PEB",
+  "benchmark_name": "Peptide Engineering Benchmark",
+  "case_counts": {
+    "binding_rank": 25,
+    "human_effect": 200,
+    "pose": 100,
+    "structure": 200
+  },
+  "direct_human_effect_prediction_claimed": false,
+  "external_qc_claimed": false,
+  "files": [
+    "baselines/predictions/.gitkeep",
+    "baselines/predictions/binding_rank_random.jsonl",
+    "baselines/predictions/human_effect_non_oracle.jsonl",
+    "baselines/predictions/human_effect_oracle_sanity_check.jsonl",
+    "baselines/predictions/pose_contact_reference.jsonl",
+    "baselines/predictions/structure_reference.jsonl",
+    "baselines/results/.gitkeep",
+    "baselines/results/binding_rank_random.json",
+    "baselines/results/human_effect_non_oracle.json",
+    "baselines/results/human_effect_non_oracle_baseline.json",
+    "baselines/results/human_effect_oracle_sanity_check.json",
+    "baselines/results/pose_contact_reference.json",
+    "baselines/results/structure_reference.json",
+    "binding_rank/cases.jsonl",
+    "binding_rank/splits/dev.jsonl",
+    "binding_rank/splits/test.jsonl",
+    "binding_rank/splits/train.jsonl",
+    "human_effect/cases.jsonl",
+    "human_effect/splits/dev.jsonl",
+    "human_effect/splits/test.jsonl",
+    "human_effect/splits/train.jsonl",
+    "pose/cases.jsonl",
+    "pose/splits/dev.jsonl",
+    "pose/splits/test.jsonl",
+    "pose/splits/train.jsonl",
+    "qc_resolution_summary.json",
+    "quality_check_summary.json",
+    "references/case_qc_cards.jsonl",
+    "references/citations.jsonl",
+    "references/exclusion_log.jsonl",
+    "references/nonredistributable_source_index.jsonl",
+    "references/qc_pass_a.jsonl",
+    "references/qc_pass_b.jsonl",
+    "references/source_ids.jsonl",
+    "references/source_status_report.jsonl",
+    "release_manifest.json",
+    "release_metadata_summary.json",
+    "source_manifest_snapshot.yaml",
+    "source_status_report.jsonl",
+    "structure/cases.jsonl",
+    "structure/splits/dev.jsonl",
+    "structure/splits/test.jsonl",
+    "structure/splits/train.jsonl"
+  ],
+  "limitations": [
+    "source-backed, not externally checked",
+    "source-reference-only records require public source fetching for raw-record inspection",
+    "pose RMSD and clash metrics are optional subset metrics"
+  ],
+  "medical_use_claimed": false,
+  "qc_qc_resolution": {
+    "downgraded": 0,
+    "excluded": 0,
+    "excluded_from_primary_scoring": 0,
+    "kept_conservative_label": 25,
+    "total_disagreements": 25,
+    "unresolved": 0
+  },
+  "qced": true,
+  "quality_check": {
+    "actions": {
+      "kept": 525
+    },
+    "disagreements": 25,
+    "pass_a": "schema_source_science_claim_rules_v1",
+    "pass_a_records": 525,
+    "pass_b": "duplicate_conservative_rules_v1",
+    "pass_b_records": 525
+  },
+  "release_date": "2026-07-07",
+  "release_id": "peb-v1.0-rc",
+  "release_mode_counts": {
+    "bundled": 0,
+    "derived": 325,
+    "excluded": 0,
+    "source_reference_only": 200
+  },
+  "release_status": "PEB v1.0 release candidate",
+  "source_manifest_snapshot": "source_manifest_snapshot.yaml",
+  "source_metadata": true
+}

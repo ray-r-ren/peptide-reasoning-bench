@@ -1,0 +1,52 @@
+{
+  "quality_check": {
+    "actions": {
+      "kept": 525
+    },
+    "qc_resolutions": {
+      "kept_conservative_label": 25,
+      "none": 500
+    },
+    "pass_a_rows": 525,
+    "pass_b_rows": 525
+  },
+  "case_counts": {
+    "binding_rank": 25,
+    "human_effect": 200,
+    "pose": 100,
+    "structure": 200
+  },
+  "limitations": [
+    "source-backed only; no human quality check is claimed",
+    "structure source-reference cases require coordinate fetch before RMSD evaluation",
+    "pose contact metrics apply to the contact-labeled subset",
+    "source-reference-only records may require public-source fetching for raw-record inspection",
+    "human-effect cases are evidence classification records, not direct efficacy predictions"
+  ],
+  "pose_metric_status": {
+    "contact_labeled_cases": 25,
+    "contact_metric_denominator": 25,
+    "coordinate_reference_only_cases": 75
+  },
+  "release_mode_counts": {
+    "bundled": 0,
+    "derived": 325,
+    "excluded": 0,
+    "source_reference_only": 200
+  },
+  "release_status": "PEB v1.0 release candidate",
+  "source_counts": {
+    "clinicaltrials": 105,
+    "dailymed": 25,
+    "gene_ontology": 55,
+    "iedb": 25,
+    "pdb": 300,
+    "reactome": 15
+  },
+  "structure_metric_status": {
+    "coordinate_evaluated_cases": 0,
+    "rmsd_not_computed_reason": "source-reference-only cases require coordinate fetch before coordinate-level RMSD evaluation",
+    "rmsd_skipped_count": 200,
+    "source_reference_cases": 200
+  }
+}

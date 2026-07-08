@@ -1,0 +1,410 @@
+{
+  "$defs": {
+    "BindingRankPrediction": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "model_name": {
+          "default": "unspecified",
+          "title": "Model Name",
+          "type": "string"
+        },
+        "prediction_id": {
+          "title": "Prediction Id",
+          "type": "string"
+        },
+        "scores": {
+          "items": {
+            "$ref": "#/$defs/BindingRankScore"
+          },
+          "minItems": 1,
+          "title": "Scores",
+          "type": "array"
+        },
+        "track": {
+          "const": "binding_rank",
+          "default": "binding_rank",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "prediction_id",
+        "benchmark_id",
+        "scores"
+      ],
+      "title": "BindingRankPrediction",
+      "type": "object"
+    },
+    "BindingRankScore": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "rank": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rank"
+        },
+        "score": {
+          "title": "Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "item_id",
+        "score"
+      ],
+      "title": "BindingRankScore",
+      "type": "object"
+    },
+    "ClaimStatus": {
+      "enum": [
+        "supported",
+        "plausible_but_unproven",
+        "unsupported",
+        "contradicted",
+        "unsafe_to_claim",
+        "insufficient_information"
+      ],
+      "title": "ClaimStatus",
+      "type": "string"
+    },
+    "ContactPair": {
+      "additionalProperties": false,
+      "properties": {
+        "distance_angstrom": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Distance Angstrom"
+        },
+        "peptide_residue": {
+          "title": "Peptide Residue",
+          "type": "string"
+        },
+        "target_residue": {
+          "title": "Target Residue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_residue",
+        "peptide_residue"
+      ],
+      "title": "ContactPair",
+      "type": "object"
+    },
+    "Coordinate": {
+      "additionalProperties": false,
+      "properties": {
+        "atom_id": {
+          "title": "Atom Id",
+          "type": "string"
+        },
+        "residue_id": {
+          "title": "Residue Id",
+          "type": "string"
+        },
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "type": "number"
+        }
+      },
+      "required": [
+        "atom_id",
+        "residue_id",
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "Coordinate",
+      "type": "object"
+    },
+    "EvidenceDirection": {
+      "enum": [
+        "positive",
+        "negative",
+        "mixed",
+        "inconclusive",
+        "not_reported",
+        "not_applicable"
+      ],
+      "title": "EvidenceDirection",
+      "type": "string"
+    },
+    "EvidenceLevel": {
+      "enum": [
+        "approved_human_indication",
+        "human_clinical_evidence",
+        "animal_preclinical_phenotype_evidence",
+        "in_vitro_target_activity_evidence",
+        "mechanistic_pathway_or_similarity_hypothesis",
+        "unsupported_contradicted_or_unsafe_claim"
+      ],
+      "title": "EvidenceLevel",
+      "type": "string"
+    },
+    "HumanEffectCategory": {
+      "enum": [
+        "metabolic_weight_glucose",
+        "endocrine_hormonal",
+        "antimicrobial_antiinfective",
+        "anticancer_tumor_homing",
+        "immune_vaccine_antigen_presentation",
+        "neuro_cns",
+        "cardiovascular",
+        "reproductive",
+        "diagnostic_imaging",
+        "toxic_adverse_effect_concern",
+        "no_known_human_effect_evidence"
+      ],
+      "title": "HumanEffectCategory",
+      "type": "string"
+    },
+    "HumanEffectPrediction": {
+      "additionalProperties": false,
+      "properties": {
+        "abstained": {
+          "default": false,
+          "title": "Abstained",
+          "type": "boolean"
+        },
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "category": {
+          "$ref": "#/$defs/HumanEffectCategory"
+        },
+        "claim_status": {
+          "$ref": "#/$defs/ClaimStatus"
+        },
+        "evidence_direction": {
+          "$ref": "#/$defs/EvidenceDirection"
+        },
+        "evidence_level": {
+          "$ref": "#/$defs/EvidenceLevel"
+        },
+        "model_name": {
+          "default": "unspecified",
+          "title": "Model Name",
+          "type": "string"
+        },
+        "prediction_id": {
+          "title": "Prediction Id",
+          "type": "string"
+        },
+        "rationale_source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rationale Source Ids",
+          "type": "array"
+        },
+        "safety_status": {
+          "$ref": "#/$defs/SafetyStatus"
+        },
+        "track": {
+          "const": "human_effect",
+          "default": "human_effect",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "prediction_id",
+        "benchmark_id",
+        "category",
+        "evidence_level",
+        "evidence_direction",
+        "claim_status",
+        "safety_status"
+      ],
+      "title": "HumanEffectPrediction",
+      "type": "object"
+    },
+    "PosePrediction": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "binding_site_residues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Binding Site Residues",
+          "type": "array"
+        },
+        "clash_score": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clash Score"
+        },
+        "model_name": {
+          "default": "unspecified",
+          "title": "Model Name",
+          "type": "string"
+        },
+        "orientation_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orientation Label"
+        },
+        "predicted_contacts": {
+          "items": {
+            "$ref": "#/$defs/ContactPair"
+          },
+          "title": "Predicted Contacts",
+          "type": "array"
+        },
+        "prediction_id": {
+          "title": "Prediction Id",
+          "type": "string"
+        },
+        "track": {
+          "const": "pose",
+          "default": "pose",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "prediction_id",
+        "benchmark_id"
+      ],
+      "title": "PosePrediction",
+      "type": "object"
+    },
+    "SafetyStatus": {
+      "enum": [
+        "known_acceptable_under_approved_use",
+        "known_risk",
+        "serious_known_risk",
+        "insufficient_safety_data",
+        "not_for_human_use"
+      ],
+      "title": "SafetyStatus",
+      "type": "string"
+    },
+    "StructurePrediction": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "coordinates": {
+          "items": {
+            "$ref": "#/$defs/Coordinate"
+          },
+          "title": "Coordinates",
+          "type": "array"
+        },
+        "model_name": {
+          "default": "unspecified",
+          "title": "Model Name",
+          "type": "string"
+        },
+        "prediction_id": {
+          "title": "Prediction Id",
+          "type": "string"
+        },
+        "track": {
+          "const": "structure",
+          "default": "structure",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "prediction_id",
+        "benchmark_id"
+      ],
+      "title": "StructurePrediction",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "binding_rank": "#/$defs/BindingRankPrediction",
+      "human_effect": "#/$defs/HumanEffectPrediction",
+      "pose": "#/$defs/PosePrediction",
+      "structure": "#/$defs/StructurePrediction"
+    },
+    "propertyName": "track"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/StructurePrediction"
+    },
+    {
+      "$ref": "#/$defs/PosePrediction"
+    },
+    {
+      "$ref": "#/$defs/BindingRankPrediction"
+    },
+    {
+      "$ref": "#/$defs/HumanEffectPrediction"
+    }
+  ]
+}

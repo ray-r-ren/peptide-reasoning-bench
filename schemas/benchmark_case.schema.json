@@ -1,0 +1,1773 @@
+{
+  "$defs": {
+    "AssayCompatibilityStatus": {
+      "enum": [
+        "compatible",
+        "compatible_with_normalization",
+        "incompatible_excluded"
+      ],
+      "title": "AssayCompatibilityStatus",
+      "type": "string"
+    },
+    "BindingRankCase": {
+      "additionalProperties": false,
+      "properties": {
+        "assay_compatibility_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssayCompatibilityStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "assay_conditions": {
+          "title": "Assay Conditions",
+          "type": "string"
+        },
+        "assay_type": {
+          "title": "Assay Type",
+          "type": "string"
+        },
+        "assay_unit": {
+          "title": "Assay Unit",
+          "type": "string"
+        },
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation"
+        },
+        "comparable_panel": {
+          "title": "Comparable Panel",
+          "type": "boolean"
+        },
+        "curator_notes": {
+          "default": "",
+          "title": "Curator Notes",
+          "type": "string"
+        },
+        "evidence_quote_or_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote Or Label"
+        },
+        "exclusion_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusion Reason"
+        },
+        "items": {
+          "items": {
+            "$ref": "#/$defs/BindingRankItem"
+          },
+          "minItems": 2,
+          "title": "Items",
+          "type": "array"
+        },
+        "leakage_group": {
+          "$ref": "#/$defs/LeakageGroup"
+        },
+        "license_or_usage_note": {
+          "title": "License Or Usage Note",
+          "type": "string"
+        },
+        "measurement_direction": {
+          "$ref": "#/$defs/MeasurementDirection"
+        },
+        "normalization_method": {
+          "title": "Normalization Method",
+          "type": "string"
+        },
+        "panel_exclusion_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Panel Exclusion Reason"
+        },
+        "panel_id": {
+          "title": "Panel Id",
+          "type": "string"
+        },
+        "processed_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processed Record Hash"
+        },
+        "qc_disagreement": {
+          "default": false,
+          "title": "Qc Disagreement",
+          "type": "boolean"
+        },
+        "qc_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Qc Notes",
+          "type": "array"
+        },
+        "qc_resolution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResolution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_status": {
+          "$ref": "#/$defs/QCStatus"
+        },
+        "redistribution_policy_snapshot": {
+          "$ref": "#/$defs/RedistributionPolicy"
+        },
+        "release_mode": {
+          "$ref": "#/$defs/ReleaseMode"
+        },
+        "retrieval_date": {
+          "title": "Retrieval Date",
+          "type": "string"
+        },
+        "scoring_subset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScoringSubset"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_database": {
+          "title": "Source Database",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Source Ids",
+          "type": "array"
+        },
+        "source_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Record Hash"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_version": {
+          "title": "Source Version",
+          "type": "string"
+        },
+        "split": {
+          "$ref": "#/$defs/Split"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Id"
+        },
+        "target_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Name"
+        },
+        "track": {
+          "const": "binding_rank",
+          "default": "binding_rank",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "benchmark_id",
+        "release_mode",
+        "source_database",
+        "source_id",
+        "source_version",
+        "retrieval_date",
+        "license_or_usage_note",
+        "redistribution_policy_snapshot",
+        "qc_status",
+        "split",
+        "leakage_group",
+        "panel_id",
+        "assay_type",
+        "assay_unit",
+        "assay_conditions",
+        "measurement_direction",
+        "normalization_method",
+        "comparable_panel",
+        "items"
+      ],
+      "title": "BindingRankCase",
+      "type": "object"
+    },
+    "BindingRankItem": {
+      "additionalProperties": false,
+      "properties": {
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "measured_value": {
+          "title": "Measured Value",
+          "type": "number"
+        },
+        "normalized_rank": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Normalized Rank",
+          "type": "number"
+        },
+        "peptide": {
+          "$ref": "#/$defs/Peptide"
+        }
+      },
+      "required": [
+        "item_id",
+        "peptide",
+        "measured_value",
+        "normalized_rank"
+      ],
+      "title": "BindingRankItem",
+      "type": "object"
+    },
+    "ClaimStatus": {
+      "enum": [
+        "supported",
+        "plausible_but_unproven",
+        "unsupported",
+        "contradicted",
+        "unsafe_to_claim",
+        "insufficient_information"
+      ],
+      "title": "ClaimStatus",
+      "type": "string"
+    },
+    "ContactLabelStatus": {
+      "enum": [
+        "computed_contacts",
+        "coordinate_reference_only",
+        "source_interface_reference",
+        "excluded"
+      ],
+      "title": "ContactLabelStatus",
+      "type": "string"
+    },
+    "ContactPair": {
+      "additionalProperties": false,
+      "properties": {
+        "distance_angstrom": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Distance Angstrom"
+        },
+        "peptide_residue": {
+          "title": "Peptide Residue",
+          "type": "string"
+        },
+        "target_residue": {
+          "title": "Target Residue",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_residue",
+        "peptide_residue"
+      ],
+      "title": "ContactPair",
+      "type": "object"
+    },
+    "Coordinate": {
+      "additionalProperties": false,
+      "properties": {
+        "atom_id": {
+          "title": "Atom Id",
+          "type": "string"
+        },
+        "residue_id": {
+          "title": "Residue Id",
+          "type": "string"
+        },
+        "x": {
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "type": "number"
+        }
+      },
+      "required": [
+        "atom_id",
+        "residue_id",
+        "x",
+        "y",
+        "z"
+      ],
+      "title": "Coordinate",
+      "type": "object"
+    },
+    "EvidenceDirection": {
+      "enum": [
+        "positive",
+        "negative",
+        "mixed",
+        "inconclusive",
+        "not_reported",
+        "not_applicable"
+      ],
+      "title": "EvidenceDirection",
+      "type": "string"
+    },
+    "EvidenceLevel": {
+      "enum": [
+        "approved_human_indication",
+        "human_clinical_evidence",
+        "animal_preclinical_phenotype_evidence",
+        "in_vitro_target_activity_evidence",
+        "mechanistic_pathway_or_similarity_hypothesis",
+        "unsupported_contradicted_or_unsafe_claim"
+      ],
+      "title": "EvidenceLevel",
+      "type": "string"
+    },
+    "EvidenceValidationStatus": {
+      "enum": [
+        "source_supported",
+        "downgraded",
+        "insufficient_information",
+        "excluded"
+      ],
+      "title": "EvidenceValidationStatus",
+      "type": "string"
+    },
+    "HumanEffectCase": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "category": {
+          "$ref": "#/$defs/HumanEffectCategory"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation"
+        },
+        "claim_status": {
+          "$ref": "#/$defs/ClaimStatus"
+        },
+        "claim_text": {
+          "title": "Claim Text",
+          "type": "string"
+        },
+        "curator_notes": {
+          "default": "",
+          "title": "Curator Notes",
+          "type": "string"
+        },
+        "evidence_direction": {
+          "$ref": "#/$defs/EvidenceDirection"
+        },
+        "evidence_level": {
+          "$ref": "#/$defs/EvidenceLevel"
+        },
+        "evidence_quote_or_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote Or Label"
+        },
+        "evidence_validation_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceValidationStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "exclusion_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusion Reason"
+        },
+        "leakage_group": {
+          "$ref": "#/$defs/LeakageGroup"
+        },
+        "license_or_usage_note": {
+          "title": "License Or Usage Note",
+          "type": "string"
+        },
+        "mechanism_support": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mechanism Support"
+        },
+        "peptide": {
+          "$ref": "#/$defs/Peptide"
+        },
+        "processed_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processed Record Hash"
+        },
+        "qc_disagreement": {
+          "default": false,
+          "title": "Qc Disagreement",
+          "type": "boolean"
+        },
+        "qc_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Qc Notes",
+          "type": "array"
+        },
+        "qc_resolution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResolution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_status": {
+          "$ref": "#/$defs/QCStatus"
+        },
+        "redistribution_policy_snapshot": {
+          "$ref": "#/$defs/RedistributionPolicy"
+        },
+        "release_mode": {
+          "$ref": "#/$defs/ReleaseMode"
+        },
+        "retrieval_date": {
+          "title": "Retrieval Date",
+          "type": "string"
+        },
+        "safety_status": {
+          "$ref": "#/$defs/SafetyStatus"
+        },
+        "scoring_subset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScoringSubset"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_database": {
+          "title": "Source Database",
+          "type": "string"
+        },
+        "source_evidence_type": {
+          "title": "Source Evidence Type",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Record Hash"
+        },
+        "source_result_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Result Count"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_version": {
+          "title": "Source Version",
+          "type": "string"
+        },
+        "split": {
+          "$ref": "#/$defs/Split"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "track": {
+          "const": "human_effect",
+          "default": "human_effect",
+          "title": "Track",
+          "type": "string"
+        },
+        "trial_has_results": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trial Has Results"
+        },
+        "trial_phase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trial Phase"
+        },
+        "trial_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trial Status"
+        }
+      },
+      "required": [
+        "benchmark_id",
+        "release_mode",
+        "source_database",
+        "source_id",
+        "source_version",
+        "retrieval_date",
+        "license_or_usage_note",
+        "redistribution_policy_snapshot",
+        "qc_status",
+        "split",
+        "leakage_group",
+        "peptide",
+        "claim_text",
+        "category",
+        "evidence_level",
+        "evidence_direction",
+        "claim_status",
+        "safety_status",
+        "source_evidence_type"
+      ],
+      "title": "HumanEffectCase",
+      "type": "object"
+    },
+    "HumanEffectCategory": {
+      "enum": [
+        "metabolic_weight_glucose",
+        "endocrine_hormonal",
+        "antimicrobial_antiinfective",
+        "anticancer_tumor_homing",
+        "immune_vaccine_antigen_presentation",
+        "neuro_cns",
+        "cardiovascular",
+        "reproductive",
+        "diagnostic_imaging",
+        "toxic_adverse_effect_concern",
+        "no_known_human_effect_evidence"
+      ],
+      "title": "HumanEffectCategory",
+      "type": "string"
+    },
+    "LeaderboardUse": {
+      "enum": [
+        "allowed",
+        "caution",
+        "avoid"
+      ],
+      "title": "LeaderboardUse",
+      "type": "string"
+    },
+    "LeakageGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "interface_cluster": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interface Cluster"
+        },
+        "panel_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Panel Id"
+        },
+        "peptide_cluster": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peptide Cluster"
+        },
+        "source_release_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Release Date"
+        },
+        "target_family": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Family"
+        }
+      },
+      "title": "LeakageGroup",
+      "type": "object"
+    },
+    "MeasurementDirection": {
+      "enum": [
+        "lower_is_stronger",
+        "higher_is_stronger",
+        "unknown"
+      ],
+      "title": "MeasurementDirection",
+      "type": "string"
+    },
+    "Peptide": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "modifications": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Modifications",
+          "type": "array"
+        },
+        "sequence": {
+          "minLength": 1,
+          "title": "Sequence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence"
+      ],
+      "title": "Peptide",
+      "type": "object"
+    },
+    "PoseCase": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "binding_site_residues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Binding Site Residues",
+          "type": "array"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation"
+        },
+        "contact_label_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ContactLabelStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "contact_map_method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Contact Map Method"
+        },
+        "coordinate_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Coordinate Reference"
+        },
+        "curator_notes": {
+          "default": "",
+          "title": "Curator Notes",
+          "type": "string"
+        },
+        "evidence_quote_or_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote Or Label"
+        },
+        "exclusion_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusion Reason"
+        },
+        "leakage_group": {
+          "$ref": "#/$defs/LeakageGroup"
+        },
+        "license_or_usage_note": {
+          "title": "License Or Usage Note",
+          "type": "string"
+        },
+        "native_contacts": {
+          "items": {
+            "$ref": "#/$defs/ContactPair"
+          },
+          "title": "Native Contacts",
+          "type": "array"
+        },
+        "orientation_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orientation Label"
+        },
+        "pdb_id": {
+          "title": "Pdb Id",
+          "type": "string"
+        },
+        "peptide": {
+          "$ref": "#/$defs/Peptide"
+        },
+        "peptide_chain_id": {
+          "title": "Peptide Chain Id",
+          "type": "string"
+        },
+        "peptide_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peptide Length"
+        },
+        "pose_subset": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pose Subset"
+        },
+        "processed_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processed Record Hash"
+        },
+        "qc_disagreement": {
+          "default": false,
+          "title": "Qc Disagreement",
+          "type": "boolean"
+        },
+        "qc_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Qc Notes",
+          "type": "array"
+        },
+        "qc_resolution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResolution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_status": {
+          "$ref": "#/$defs/QCStatus"
+        },
+        "redistribution_policy_snapshot": {
+          "$ref": "#/$defs/RedistributionPolicy"
+        },
+        "release_mode": {
+          "$ref": "#/$defs/ReleaseMode"
+        },
+        "retrieval_date": {
+          "title": "Retrieval Date",
+          "type": "string"
+        },
+        "scoring_subset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScoringSubset"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_database": {
+          "title": "Source Database",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Record Hash"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_version": {
+          "title": "Source Version",
+          "type": "string"
+        },
+        "split": {
+          "$ref": "#/$defs/Split"
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "target_chain_id": {
+          "title": "Target Chain Id",
+          "type": "string"
+        },
+        "target_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Length"
+        },
+        "track": {
+          "const": "pose",
+          "default": "pose",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "benchmark_id",
+        "release_mode",
+        "source_database",
+        "source_id",
+        "source_version",
+        "retrieval_date",
+        "license_or_usage_note",
+        "redistribution_policy_snapshot",
+        "qc_status",
+        "split",
+        "leakage_group",
+        "peptide",
+        "target",
+        "pdb_id",
+        "target_chain_id",
+        "peptide_chain_id"
+      ],
+      "title": "PoseCase",
+      "type": "object"
+    },
+    "Protein": {
+      "additionalProperties": false,
+      "properties": {
+        "accession": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Accession"
+        },
+        "chain_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chain Id"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "sequence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sequence"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Protein",
+      "type": "object"
+    },
+    "QCResolution": {
+      "enum": [
+        "kept_conservative_label",
+        "downgraded",
+        "excluded_from_primary_scoring",
+        "excluded"
+      ],
+      "title": "QCResolution",
+      "type": "string"
+    },
+    "QCResult": {
+      "enum": [
+        "passed_qc",
+        "passed_with_warnings",
+        "downgraded_by_qc",
+        "excluded_by_qc"
+      ],
+      "title": "QCResult",
+      "type": "string"
+    },
+    "QCStatus": {
+      "enum": [
+        "unchecked",
+        "source_checked",
+        "external_qc",
+        "excluded"
+      ],
+      "title": "QCStatus",
+      "type": "string"
+    },
+    "RedistributionPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution_required": {
+          "title": "Attribution Required",
+          "type": "boolean"
+        },
+        "commercial_use": {
+          "$ref": "#/$defs/RedistributionValue"
+        },
+        "processed_label_redistribution": {
+          "$ref": "#/$defs/RedistributionValue"
+        },
+        "raw_data_redistribution": {
+          "$ref": "#/$defs/RedistributionValue"
+        },
+        "share_alike_obligation": {
+          "title": "Share Alike Obligation",
+          "type": "boolean"
+        },
+        "use_in_public_leaderboard": {
+          "$ref": "#/$defs/LeaderboardUse"
+        }
+      },
+      "required": [
+        "raw_data_redistribution",
+        "processed_label_redistribution",
+        "commercial_use",
+        "attribution_required",
+        "share_alike_obligation",
+        "use_in_public_leaderboard"
+      ],
+      "title": "RedistributionPolicy",
+      "type": "object"
+    },
+    "RedistributionValue": {
+      "enum": [
+        "allowed",
+        "restricted",
+        "unknown"
+      ],
+      "title": "RedistributionValue",
+      "type": "string"
+    },
+    "ReleaseMode": {
+      "enum": [
+        "bundled",
+        "derived",
+        "source_reference_only",
+        "excluded"
+      ],
+      "title": "ReleaseMode",
+      "type": "string"
+    },
+    "SafetyStatus": {
+      "enum": [
+        "known_acceptable_under_approved_use",
+        "known_risk",
+        "serious_known_risk",
+        "insufficient_safety_data",
+        "not_for_human_use"
+      ],
+      "title": "SafetyStatus",
+      "type": "string"
+    },
+    "ScoringSubset": {
+      "enum": [
+        "primary",
+        "source_reference_only",
+        "contact_labeled_subset",
+        "warning_only",
+        "excluded"
+      ],
+      "title": "ScoringSubset",
+      "type": "string"
+    },
+    "SourceReference": {
+      "additionalProperties": false,
+      "properties": {
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation"
+        },
+        "retrieval_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retrieval Date"
+        },
+        "source_database": {
+          "title": "Source Database",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Version"
+        }
+      },
+      "required": [
+        "source_database",
+        "source_id"
+      ],
+      "title": "SourceReference",
+      "type": "object"
+    },
+    "Split": {
+      "enum": [
+        "train",
+        "dev",
+        "test"
+      ],
+      "title": "Split",
+      "type": "string"
+    },
+    "StructureCase": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_id": {
+          "title": "Benchmark Id",
+          "type": "string"
+        },
+        "chain_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Chain Id"
+        },
+        "citation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Citation"
+        },
+        "confidence_notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence Notes"
+        },
+        "curator_notes": {
+          "default": "",
+          "title": "Curator Notes",
+          "type": "string"
+        },
+        "entity_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Entity Id"
+        },
+        "evidence_quote_or_label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote Or Label"
+        },
+        "exclusion_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusion Reason"
+        },
+        "experimental_method": {
+          "title": "Experimental Method",
+          "type": "string"
+        },
+        "gold_coordinates": {
+          "items": {
+            "$ref": "#/$defs/Coordinate"
+          },
+          "title": "Gold Coordinates",
+          "type": "array"
+        },
+        "gold_structure_reference": {
+          "$ref": "#/$defs/SourceReference"
+        },
+        "leakage_group": {
+          "$ref": "#/$defs/LeakageGroup"
+        },
+        "license_or_usage_note": {
+          "title": "License Or Usage Note",
+          "type": "string"
+        },
+        "peptide": {
+          "$ref": "#/$defs/Peptide"
+        },
+        "peptide_length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peptide Length"
+        },
+        "processed_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Processed Record Hash"
+        },
+        "qc_disagreement": {
+          "default": false,
+          "title": "Qc Disagreement",
+          "type": "boolean"
+        },
+        "qc_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Qc Notes",
+          "type": "array"
+        },
+        "qc_resolution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResolution"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QCResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "qc_status": {
+          "$ref": "#/$defs/QCStatus"
+        },
+        "redistribution_policy_snapshot": {
+          "$ref": "#/$defs/RedistributionPolicy"
+        },
+        "release_mode": {
+          "$ref": "#/$defs/ReleaseMode"
+        },
+        "resolution_angstrom": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolution Angstrom"
+        },
+        "retrieval_date": {
+          "title": "Retrieval Date",
+          "type": "string"
+        },
+        "scoring_subset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScoringSubset"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "source_database": {
+          "title": "Source Database",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "source_record_hash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Record Hash"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_version": {
+          "title": "Source Version",
+          "type": "string"
+        },
+        "split": {
+          "$ref": "#/$defs/Split"
+        },
+        "structure_file_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Structure File Url"
+        },
+        "structure_id": {
+          "title": "Structure Id",
+          "type": "string"
+        },
+        "track": {
+          "const": "structure",
+          "default": "structure",
+          "title": "Track",
+          "type": "string"
+        }
+      },
+      "required": [
+        "benchmark_id",
+        "release_mode",
+        "source_database",
+        "source_id",
+        "source_version",
+        "retrieval_date",
+        "license_or_usage_note",
+        "redistribution_policy_snapshot",
+        "qc_status",
+        "split",
+        "leakage_group",
+        "peptide",
+        "structure_id",
+        "experimental_method",
+        "gold_structure_reference"
+      ],
+      "title": "StructureCase",
+      "type": "object"
+    },
+    "Target": {
+      "additionalProperties": false,
+      "properties": {
+        "organism": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Organism"
+        },
+        "protein": {
+          "$ref": "#/$defs/Protein"
+        },
+        "target_family": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Family"
+        }
+      },
+      "required": [
+        "protein"
+      ],
+      "title": "Target",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "binding_rank": "#/$defs/BindingRankCase",
+      "human_effect": "#/$defs/HumanEffectCase",
+      "pose": "#/$defs/PoseCase",
+      "structure": "#/$defs/StructureCase"
+    },
+    "propertyName": "track"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/StructureCase"
+    },
+    {
+      "$ref": "#/$defs/PoseCase"
+    },
+    {
+      "$ref": "#/$defs/BindingRankCase"
+    },
+    {
+      "$ref": "#/$defs/HumanEffectCase"
+    }
+  ]
+}

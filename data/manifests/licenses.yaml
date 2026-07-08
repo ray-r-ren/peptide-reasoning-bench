@@ -1,0 +1,9 @@
+licenses:
+  software:
+    name: MIT
+    applies_to: package code and documentation authored for this repository
+  data_policy:
+    name: source-governed
+    applies_to: source-backed case metadata and derived labels
+    note: Each source record carries its own redistribution snapshot.
+

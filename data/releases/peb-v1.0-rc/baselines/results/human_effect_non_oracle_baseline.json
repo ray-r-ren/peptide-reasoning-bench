@@ -1,0 +1,26 @@
+{
+  "competitive": true,
+  "leaderboard_group": "competitive",
+  "metrics": {
+    "abstention_calibration": "not_computed",
+    "category_macro_f1": 0.32222222222222224,
+    "claim_status_accuracy": 0.875,
+    "correct_abstention_credit": 25,
+    "evidence_direction_accuracy": 0.775,
+    "evidence_level_distance_penalty": 0.5,
+    "evidence_level_ordinal_accuracy": 0.875,
+    "hallucinated_support_penalty": 0,
+    "overclaim_penalty": 25,
+    "pathway_only_overclaim_penalty": 0,
+    "safety_overclaim_penalty": 0,
+    "trial_without_results_penalty": 0,
+    "unsafe_claim_detection_rate": 1.0,
+    "unsupported_claim_detection_rate": 0.0
+  },
+  "model_name": "human_effect_non_oracle_baseline",
+  "n_cases": 200,
+  "n_predictions": 200,
+  "oracle_baseline": false,
+  "track": "human_effect",
+  "warnings": []
+}

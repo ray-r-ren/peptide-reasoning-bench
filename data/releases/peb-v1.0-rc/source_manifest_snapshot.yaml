@@ -1,0 +1,387 @@
+policies:
+  bucket_a_open: &bucket_a_open
+    raw_data_redistribution: allowed
+    processed_label_redistribution: allowed
+    commercial_use: allowed
+    attribution_required: true
+    share_alike_obligation: false
+    use_in_public_leaderboard: allowed
+  cautious_reference: &cautious_reference
+    raw_data_redistribution: restricted
+    processed_label_redistribution: unknown
+    commercial_use: unknown
+    attribution_required: true
+    share_alike_obligation: false
+    use_in_public_leaderboard: caution
+  avoid_raw: &avoid_raw
+    raw_data_redistribution: unknown
+    processed_label_redistribution: unknown
+    commercial_use: unknown
+    attribution_required: true
+    share_alike_obligation: false
+    use_in_public_leaderboard: avoid
+
+sources:
+  - name: pdb
+    module: peb.sources.pdb
+    url: https://www.wwpdb.org/
+    source_category: experimental_structure
+    expected_fields: [pdb_id, entity_id, chain_id, experimental_method, release_date]
+    license_or_usage_note: Public wwPDB archive data with attribution and source identifiers retained.
+    citation: wwPDB archive and RCSB PDB data portal documentation.
+    source_version: live archive snapshot
+    retrieval_date_policy: Store UTC retrieval date for every fetched entry.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Primary structure and pose source for source-backed cases.
+    source_bucket: A
+
+  - name: rcsb
+    module: peb.sources.rcsb
+    url: https://www.rcsb.org/
+    source_category: experimental_structure_metadata
+    expected_fields: [pdb_id, entity_id, polymer_type, chain_id, release_date]
+    license_or_usage_note: Public RCSB metadata with attribution and source identifiers retained.
+    citation: RCSB PDB data portal documentation.
+    source_version: live API snapshot
+    retrieval_date_policy: Store UTC retrieval date for every API response.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Used for explicit metadata fetches and query-based candidate discovery.
+    source_bucket: A
+
+  - name: alphafold_db
+    module: peb.sources.alphafold_db
+    url: https://alphafold.ebi.ac.uk/
+    source_category: predicted_structure_reference
+    expected_fields: [uniprot_accession, model_url, confidence_summary, version]
+    license_or_usage_note: Predicted structures are reference/context only and require CC-BY attribution.
+    citation: AlphaFold DB portal documentation.
+    source_version: database release noted per record
+    retrieval_date_policy: Store UTC retrieval date and model version.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Must not be treated as experimental gold.
+    source_bucket: A
+
+  - name: dailymed
+    module: peb.sources.dailymed
+    url: https://dailymed.nlm.nih.gov/dailymed/
+    source_category: official_label_reference
+    expected_fields: [set_id, label_version, section, retrieval_date]
+    license_or_usage_note: Public label data; release stores concise labels and source references, not copied full labels.
+    citation: DailyMed public label data portal documentation.
+    source_version: label version per record
+    retrieval_date_policy: Store UTC retrieval date and set identifier.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Required for approved-human-indication evidence cases.
+    source_bucket: A
+
+  - name: clinicaltrials
+    module: peb.sources.clinicaltrials
+    url: https://clinicaltrials.gov/
+    source_category: clinical_trial_record
+    expected_fields: [nct_id, status, phase, results_available, retrieval_date]
+    license_or_usage_note: Public trial records; trial existence alone is not positive evidence.
+    citation: ClinicalTrials.gov public API documentation.
+    source_version: live API snapshot
+    retrieval_date_policy: Store UTC retrieval date for every API response.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Used for clinical evidence classification with result-availability safeguards.
+    source_bucket: A
+
+  - name: aact
+    module: peb.sources.aact
+    url: https://aact.ctti-clinicaltrials.org/
+    source_category: clinical_trial_record
+    expected_fields: [nct_id, status, phase, results_available, snapshot_date]
+    license_or_usage_note: Public clinical-trial aggregate snapshots require snapshot attribution.
+    citation: AACT public data documentation.
+    source_version: snapshot date
+    retrieval_date_policy: Store snapshot and local retrieval date.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Treated as an alternate ClinicalTrials.gov source.
+    source_bucket: A
+
+  - name: iedb
+    module: peb.sources.iedb
+    url: https://www.iedb.org/
+    source_category: immune_epitope_assay
+    expected_fields: [epitope_id, assay_type, assay_unit, measurement, host, mhc_allele]
+    license_or_usage_note: Use with attribution and license qc before bundling exported records.
+    citation: IEDB data portal documentation.
+    source_version: export or API snapshot
+    retrieval_date_policy: Store UTC retrieval date and export query.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Candidate source for assay-aware binding-rank panels.
+    source_bucket: A
+
+  - name: reactome
+    module: peb.sources.reactome
+    url: https://reactome.org/
+    source_category: pathway_reference
+    expected_fields: [pathway_id, entity_id, relation_type, evidence_code]
+    license_or_usage_note: Pathway context only; not direct human-effect evidence.
+    citation: Reactome data portal documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: May support low-level mechanistic context only.
+    source_bucket: A
+
+  - name: gene_ontology
+    module: peb.sources.gene_ontology
+    url: http://geneontology.org/
+    source_category: ontology_reference
+    expected_fields: [go_id, term, evidence_code, relation]
+    license_or_usage_note: Ontology context only; not direct human-effect evidence.
+    citation: Gene Ontology resource documentation.
+    source_version: ontology release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: May support low-level mechanistic context only.
+    source_bucket: A
+
+  - name: bindingdb
+    module: peb.sources.bindingdb
+    url: https://www.bindingdb.org/
+    source_category: binding_assay
+    expected_fields: [ligand_id, target_id, assay_type, assay_unit, measurement]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: BindingDB data portal documentation.
+    source_version: export snapshot
+    retrieval_date_policy: Store export date and query.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Reference-only until license qc is complete.
+    source_bucket: B
+
+  - name: chembl
+    module: peb.sources.chembl
+    url: https://www.ebi.ac.uk/chembl/
+    source_category: bioactivity_assay
+    expected_fields: [molecule_id, target_id, assay_type, assay_unit, measurement]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: ChEMBL data portal documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Reference-only for this release candidate.
+    source_bucket: B
+
+  - name: iuphar
+    module: peb.sources.iuphar
+    url: https://www.guidetopharmacology.org/
+    source_category: pharmacology_reference
+    expected_fields: [ligand_id, target_id, action, evidence_reference]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: IUPHAR/BPS Guide to Pharmacology data portal documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Reference-only for this release candidate.
+    source_bucket: B
+
+  - name: drugcentral
+    module: peb.sources.drugcentral
+    url: https://drugcentral.org/
+    source_category: drug_reference
+    expected_fields: [drug_id, target_id, indication_reference, approval_context]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: DrugCentral data portal documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Reference-only for this release candidate.
+    source_bucket: B
+
+  - name: opentargets
+    module: peb.sources.opentargets
+    url: https://platform.opentargets.org/
+    source_category: target_disease_reference
+    expected_fields: [target_id, disease_id, evidence_type, score]
+    license_or_usage_note: Target-pathway association is not human efficacy evidence.
+    citation: Open Targets Platform documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Low-level context only unless paired with stronger source evidence.
+    source_bucket: B
+
+  - name: sider
+    module: peb.sources.sider
+    url: http://sideeffects.embl.de/
+    source_category: adverse_event_reference
+    expected_fields: [compound_id, adverse_event_id, source_reference]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: SIDER data portal documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Safety evidence must remain separate from efficacy evidence.
+    source_bucket: B
+
+  - name: openfda_faers
+    module: peb.sources.openfda_faers
+    url: https://open.fda.gov/apis/drug/event/
+    source_category: adverse_event_report
+    expected_fields: [report_id, product_name, reaction, seriousness, received_date]
+    license_or_usage_note: Public reports are noisy safety signals and must not be treated as causal proof.
+    citation: openFDA drug adverse event API documentation.
+    source_version: live API snapshot
+    retrieval_date_policy: Store UTC retrieval date and query.
+    redistribution_policy: *bucket_a_open
+    adapter_status: implemented
+    comments: Safety signal context only.
+    source_bucket: B
+
+  - name: propedia
+    module: peb.sources.propedia
+    url: https://bioinfo.dcc.ufmg.br/propedia/
+    source_category: protein_peptide_complex_reference
+    expected_fields: [complex_id, pdb_id, target_chain, peptide_chain]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: Propedia data portal documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Reference-only until redistribution qc is complete.
+    source_bucket: B
+
+  - name: pepbdb
+    module: peb.sources.pepbdb
+    url: https://example.org/pepbdb
+    source_category: protein_peptide_complex_reference
+    expected_fields: [complex_id, pdb_id, target_chain, peptide_chain]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: PepBDB source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: pepbind
+    module: peb.sources.pepbind
+    url: https://example.org/pepbind
+    source_category: peptide_binding_reference
+    expected_fields: [peptide_id, target_id, label, source_reference]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: PepBind source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: pepbi
+    module: peb.sources.pepbi
+    url: https://example.org/pepbi
+    source_category: peptide_bioactivity_reference
+    expected_fields: [peptide_id, target_id, label, source_reference]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: PEPBI source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: thpdb
+    module: peb.sources.thpdb
+    url: https://example.org/thpdb
+    source_category: peptide_reference
+    expected_fields: [peptide_id, category, source_reference]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: THPdb source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: peptherdia
+    module: peb.sources.peptherdia
+    url: https://example.org/peptherdia
+    source_category: peptide_reference
+    expected_fields: [peptide_id, category, source_reference]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: PepTherDia source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: satpdb
+    module: peb.sources.satpdb
+    url: https://example.org/satpdb
+    source_category: peptide_reference
+    expected_fields: [peptide_id, category, source_reference]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: SATPdb source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: cancerppd
+    module: peb.sources.cancerppd
+    url: https://example.org/cancerppd
+    source_category: peptide_reference
+    expected_fields: [peptide_id, category, source_reference]
+    license_or_usage_note: Future source-location and terms analysis is needed before import or raw-record bundling.
+    citation: CancerPPD source documentation pending license qc.
+    source_version: pending qc
+    retrieval_date_policy: Do not fetch until source location and terms are checked.
+    redistribution_policy: *avoid_raw
+    adapter_status: implemented
+    comments: Placeholder manifest entry to prevent accidental raw bundling.
+    source_bucket: B
+
+  - name: neuropep
+    module: peb.sources.neuropep
+    url: https://isyslab.info/NeuroPep/
+    source_category: peptide_reference
+    expected_fields: [peptide_id, category, source_reference]
+    license_or_usage_note: Future license and redistribution analysis is needed before public raw-record bundling.
+    citation: NeuroPep source documentation.
+    source_version: database release
+    retrieval_date_policy: Store release and retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Reference-only for this release candidate.
+    source_bucket: B
+
+  - name: dbaasp
+    module: peb.sources.dbaasp
+    url: https://dbaasp.org/
+    source_category: antimicrobial_peptide_activity
+    expected_fields: [peptide_id, sequence, target, assay_type, assay_unit, measurement]
+    license_or_usage_note: Public source requires source-specific qc before raw exports are bundled.
+    citation: DBAASP public data portal documentation.
+    source_version: database or export snapshot
+    retrieval_date_policy: Store release or export retrieval date.
+    redistribution_policy: *cautious_reference
+    adapter_status: implemented
+    comments: Candidate source for assay-aware antimicrobial activity ranking panels.
+    source_bucket: B
