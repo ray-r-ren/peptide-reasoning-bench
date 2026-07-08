@@ -1,0 +1,20 @@
+{
+  "action_taken": {
+    "competitive_rows": "retained only rows with clean_completed status",
+    "failed_rows": "excluded from competitive ranking and recorded as non-scored metadata",
+    "fallback_predictions": "not counted as completed competitive outputs"
+  },
+  "competitive_rows": 17,
+  "excluded_rows": 1,
+  "failures_by_error_type": {},
+  "failures_by_mode": {},
+  "failures_by_model": {},
+  "failures_by_track": {},
+  "generated_at": "2026-07-09T00:37:42Z",
+  "retry_recovered": 5134,
+  "retry_still_failed": 0,
+  "retry_total": 5134,
+  "root_cause_categories": {
+    "invalid_json_or_schema_unresolved": 1
+  }
+}

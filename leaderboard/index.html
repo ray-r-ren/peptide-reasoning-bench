@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Peptide Engineering Benchmark Leaderboard</title>
+  <link rel="stylesheet" href="assets/leaderboard.css">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>Peptide Engineering Benchmark Leaderboard</h1>
+      <p>Static leaderboard for included benchmark runs.</p>
+    </header>
+    <section class="controls" aria-label="Filters">
+      <button type="button" data-filter="competitive" class="active">Competitive only</button>
+      <button type="button" data-filter="all">All</button>
+      <button type="button" data-filter="base">Base</button>
+      <button type="button" data-filter="tools_high_reasoning">Tools + high reasoning</button>
+      <button type="button" data-filter="baselines">Baselines</button>
+    </section>
+    <section class="summary" id="summary"></section>
+    <div class="table-wrap">
+      <table id="leaderboard-table">
+        <thead>
+          <tr>
+            <th data-sort="rank">Rank</th>
+            <th data-sort="model_id">Model</th>
+            <th data-sort="mode_label">Mode</th>
+            <th data-sort="mean_score">Mean</th>
+            <th data-sort="coverage_adjusted_score">Coverage-adjusted mean</th>
+            <th data-sort="human_effect">Human Effect</th>
+            <th data-sort="binding_rank">Binding Rank</th>
+            <th data-sort="pose">Pose</th>
+            <th data-sort="structure">Structure</th>
+            <th data-sort="coverage">Coverage</th>
+            <th data-sort="api_error_count">API Errors</th>
+            <th data-sort="invalid_json_count">Invalid JSON</th>
+            <th data-sort="status">Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+  <script src="assets/leaderboard.js"></script>
+</body>
+</html>

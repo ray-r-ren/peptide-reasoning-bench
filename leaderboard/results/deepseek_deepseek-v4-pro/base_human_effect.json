@@ -1,0 +1,22 @@
+{
+  "metrics": {
+    "abstention_calibration": "not_computed",
+    "category_macro_f1": 0.6161196827863494,
+    "claim_status_accuracy": 0.195,
+    "correct_abstention_credit": 0,
+    "evidence_direction_accuracy": 0.7,
+    "evidence_level_distance_penalty": 0.07,
+    "evidence_level_ordinal_accuracy": 0.93,
+    "hallucinated_support_penalty": 0,
+    "overclaim_penalty": 0,
+    "pathway_only_overclaim_penalty": 0,
+    "safety_overclaim_penalty": 0,
+    "trial_without_results_penalty": 0,
+    "unsafe_claim_detection_rate": 1.0,
+    "unsupported_claim_detection_rate": 1.0
+  },
+  "n_cases": 200,
+  "n_predictions": 200,
+  "track": "human_effect",
+  "warnings": []
+}

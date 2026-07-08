@@ -1,0 +1,19 @@
+{
+  "metrics": {
+    "binding_site_recovery": 0.0,
+    "clash_penalty": "not_computed",
+    "contact_metric_denominator": 25,
+    "contact_metric_exclusion_reason": "coordinate-reference-only cases lack native contact labels",
+    "interface_contact_precision": 0.0,
+    "interface_contact_recall": 0.0,
+    "interface_rmsd": "not_computed",
+    "native_contact_recovery": 0.0,
+    "peptide_orientation_accuracy": 0.0,
+    "pose_contact_labeled_subset_count": 25,
+    "pose_coordinate_reference_subset_count": 0
+  },
+  "n_cases": 25,
+  "n_predictions": 25,
+  "track": "pose",
+  "warnings": []
+}

@@ -1,0 +1,50 @@
+{
+  "retrieved_at": "2026-07-08T13:05:56Z",
+  "selection": [
+    {
+      "model_id": "openai/gpt-5.5-pro",
+      "family": "openai",
+      "selection_note": "latest current OpenAI reasoning/chat model available in the live list"
+    },
+    {
+      "model_id": "anthropic/claude-sonnet-5",
+      "family": "anthropic",
+      "selection_note": "latest current Anthropic Claude Sonnet/Opus model available in the live list"
+    },
+    {
+      "model_id": "google/gemini-2.5-pro",
+      "family": "google",
+      "selection_note": "latest current Google Gemini Pro model available in the live list"
+    },
+    {
+      "model_id": "deepseek/deepseek-v4-pro",
+      "family": "deepseek",
+      "selection_note": "latest current DeepSeek reasoning/chat model available in the live list"
+    },
+    {
+      "model_id": "x-ai/grok-4.3",
+      "family": "xai",
+      "selection_note": "latest current xAI Grok model available in the live list"
+    },
+    {
+      "model_id": "qwen/qwen3.7-max",
+      "family": "qwen",
+      "selection_note": "latest current Qwen instruct/reasoning model available in the live list"
+    },
+    {
+      "model_id": "meta-llama/llama-4-maverick",
+      "family": "llama",
+      "selection_note": "latest current Llama instruct model available in the live list"
+    },
+    {
+      "model_id": "mistralai/mistral-medium-3-5",
+      "family": "mistral",
+      "selection_note": "latest current Mistral instruct model available in the live list"
+    },
+    {
+      "model_id": "inclusionai/ling-2.6-flash",
+      "family": "small_fast",
+      "selection_note": "lowest-priced current explicit model in the live list after family selections"
+    }
+  ]
+}

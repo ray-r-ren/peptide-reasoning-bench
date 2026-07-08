@@ -1,0 +1,147 @@
+{
+  "models": [
+    {
+      "model_id": "openai/gpt-5.5-pro",
+      "provider": "openai",
+      "family": "openai",
+      "name": "OpenAI: GPT-5.5 Pro",
+      "context_length": 1050000,
+      "pricing": {
+        "prompt": "0.00003",
+        "completion": "0.00018",
+        "web_search": "0.01"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "openai",
+      "selection_note": "latest current OpenAI reasoning/chat model available in the live list"
+    },
+    {
+      "model_id": "anthropic/claude-sonnet-5",
+      "provider": "anthropic",
+      "family": "anthropic",
+      "name": "Anthropic: Claude Sonnet 5",
+      "context_length": 1000000,
+      "pricing": {
+        "prompt": "0.000002",
+        "completion": "0.00001",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000002",
+        "input_cache_write": "0.0000025",
+        "input_cache_write_1h": "0.000004"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "anthropic",
+      "selection_note": "latest current Anthropic Claude Sonnet/Opus model available in the live list"
+    },
+    {
+      "model_id": "google/gemini-2.5-pro",
+      "provider": "google",
+      "family": "google",
+      "name": "Google: Gemini 2.5 Pro",
+      "context_length": 1048576,
+      "pricing": {
+        "prompt": "0.00000125",
+        "completion": "0.00001",
+        "image": "0.00000125",
+        "audio": "0.00000125",
+        "web_search": "0.014",
+        "internal_reasoning": "0.00001",
+        "input_cache_read": "0.000000125",
+        "input_cache_write": "0.000000375"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "google",
+      "selection_note": "latest current Google Gemini Pro model available in the live list"
+    },
+    {
+      "model_id": "deepseek/deepseek-v4-pro",
+      "provider": "deepseek",
+      "family": "deepseek",
+      "name": "DeepSeek: DeepSeek V4 Pro",
+      "context_length": 1048576,
+      "pricing": {
+        "prompt": "0.000000435",
+        "completion": "0.00000087",
+        "input_cache_read": "0.000000003625"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "deepseek",
+      "selection_note": "latest current DeepSeek reasoning/chat model available in the live list"
+    },
+    {
+      "model_id": "x-ai/grok-4.3",
+      "provider": "x-ai",
+      "family": "xai",
+      "name": "xAI: Grok 4.3",
+      "context_length": 1000000,
+      "pricing": {
+        "prompt": "0.00000125",
+        "completion": "0.0000025",
+        "web_search": "0.005",
+        "input_cache_read": "0.0000002"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "xai",
+      "selection_note": "latest current xAI Grok model available in the live list"
+    },
+    {
+      "model_id": "qwen/qwen3.7-max",
+      "provider": "qwen",
+      "family": "qwen",
+      "name": "Qwen: Qwen3.7 Max",
+      "context_length": 1000000,
+      "pricing": {
+        "prompt": "0.00000125",
+        "completion": "0.00000375",
+        "input_cache_read": "0.00000025",
+        "input_cache_write": "0.0000015625"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "qwen",
+      "selection_note": "latest current Qwen instruct/reasoning model available in the live list"
+    },
+    {
+      "model_id": "meta-llama/llama-4-maverick",
+      "provider": "meta-llama",
+      "family": "llama",
+      "name": "Meta: Llama 4 Maverick",
+      "context_length": 1048576,
+      "pricing": {
+        "prompt": "0.00000015",
+        "completion": "0.0000006"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "llama",
+      "selection_note": "latest current Llama instruct model available in the live list"
+    },
+    {
+      "model_id": "mistralai/mistral-medium-3-5",
+      "provider": "mistralai",
+      "family": "mistral",
+      "name": "Mistral: Mistral Medium 3.5",
+      "context_length": 262144,
+      "pricing": {
+        "prompt": "0.0000015",
+        "completion": "0.0000075"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "mistral",
+      "selection_note": "latest current Mistral instruct model available in the live list"
+    },
+    {
+      "model_id": "inclusionai/ling-2.6-flash",
+      "provider": "inclusionai",
+      "family": "small_fast",
+      "name": "inclusionAI: Ling-2.6-flash",
+      "context_length": 262144,
+      "pricing": {
+        "prompt": "0.00000001",
+        "completion": "0.00000003",
+        "input_cache_read": "0.000000002"
+      },
+      "structured_outputs_supported": true,
+      "selected_for": "small_fast",
+      "selection_note": "lowest-priced current explicit model in the live list after family selections"
+    }
+  ]
+}

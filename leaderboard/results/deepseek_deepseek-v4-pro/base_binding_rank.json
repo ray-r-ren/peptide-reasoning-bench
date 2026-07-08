@@ -1,0 +1,14 @@
+{
+  "metrics": {
+    "assay_aware_subgroup_count": 25,
+    "concordance_index": 0.4557002997002998,
+    "kendall_tau": -0.04859940059940058,
+    "pairwise_ranking_accuracy": 0.4557002997002998,
+    "spearman": -0.06020836023484085,
+    "top_1_enrichment": 0.12
+  },
+  "n_cases": 25,
+  "n_predictions": 25,
+  "track": "binding_rank",
+  "warnings": []
+}

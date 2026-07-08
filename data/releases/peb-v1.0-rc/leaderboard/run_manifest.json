@@ -1,0 +1,415 @@
+{
+  "benchmark_release": "peb-v1.0-rc",
+  "details": [
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "openai/gpt-5.5-pro",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "openai/gpt-5.5-pro",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 1,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "anthropic/claude-sonnet-5",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 2,
+      "retry_recovered_count": 1,
+      "retry_still_failed_count": 1
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "anthropic/claude-sonnet-5",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "google/gemini-2.5-pro",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "google/gemini-2.5-pro",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "deepseek/deepseek-v4-pro",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "deepseek/deepseek-v4-pro",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "x-ai/grok-4.3",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "x-ai/grok-4.3",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "qwen/qwen3.7-max",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "qwen/qwen3.7-max",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "meta-llama/llama-4-maverick",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "meta-llama/llama-4-maverick",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "mistralai/mistral-medium-3-5",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "mistralai/mistral-medium-3-5",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "base",
+      "model_id": "inclusionai/ling-2.6-flash",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    },
+    {
+      "api_error_count": 0,
+      "attempted": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "completed": {
+        "binding_rank": 25,
+        "human_effect": 200,
+        "pose": 25,
+        "structure": 200
+      },
+      "invalid_json_count": 0,
+      "mode": "tools_high_reasoning",
+      "model_id": "inclusionai/ling-2.6-flash",
+      "original_api_error_count": 0,
+      "original_invalid_json_count": 0,
+      "retry_queue_size": 0,
+      "retry_recovered_count": 0,
+      "retry_still_failed_count": 0
+    }
+  ],
+  "leaderboard_rows": 23,
+  "models": [
+    "openai/gpt-5.5-pro",
+    "anthropic/claude-sonnet-5",
+    "google/gemini-2.5-pro",
+    "deepseek/deepseek-v4-pro",
+    "x-ai/grok-4.3",
+    "qwen/qwen3.7-max",
+    "meta-llama/llama-4-maverick",
+    "mistralai/mistral-medium-3-5",
+    "inclusionai/ling-2.6-flash"
+  ],
+  "modes": [
+    "base",
+    "tools_high_reasoning"
+  ],
+  "original_api_error_count": 0,
+  "original_invalid_json_count": 0,
+  "peb_version": "1.0.0rc0",
+  "post_retry_api_error_count": 1,
+  "post_retry_invalid_json_count": 0,
+  "retry_queue_size": 2,
+  "retry_recovered_count": 1,
+  "retry_run_timestamp": "2026-07-09T00:40:30Z",
+  "retry_still_failed_count": 1,
+  "run_timestamp": "2026-07-09T00:40:30Z",
+  "tracks": [
+    "human_effect",
+    "binding_rank",
+    "pose",
+    "structure"
+  ]
+}

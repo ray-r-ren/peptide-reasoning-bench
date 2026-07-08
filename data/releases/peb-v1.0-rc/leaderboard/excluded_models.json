@@ -1,0 +1,17 @@
+[
+  {
+    "error_counts": {
+      "api_error_count": 0,
+      "fallback_prediction_count": 0,
+      "invalid_json_count": 5,
+      "unresolved_invalid_json_count": 5,
+      "unresolved_provider_error_count": 0
+    },
+    "mode": "base",
+    "original_model_id": "google/gemini-2.5-pro",
+    "reason_excluded": "invalid_json_or_schema_unresolved",
+    "replacement_model_id": null,
+    "replacement_reason": "no clean replacement run available in current artifacts",
+    "row_status": "excluded_invalid_json"
+  }
+]

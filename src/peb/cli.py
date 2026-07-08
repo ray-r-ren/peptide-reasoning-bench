@@ -16,6 +16,15 @@ from peb.metrics import (
     evaluate_pose,
     evaluate_structure,
 )
+from peb.openrouter_leaderboard import (
+    fetch_openrouter_models,
+    finalize_strict_leaderboard,
+    inspect_leaderboard_input,
+    leaderboard_check,
+    openrouter_retry_failures,
+    run_openrouter_leaderboard,
+    write_static_leaderboard_page,
+)
 from peb.processing.audit import audit_jsonl
 from peb.processing.curation_templates import base_case_fields, create_templates, read_csv_rows
 from peb.processing.pdb_contacts import compute_contacts
@@ -583,6 +592,135 @@ def package_release_command(
         typer.echo(f"error: {exc}", err=True)
         raise typer.Exit(1) from exc
     typer.echo(json.dumps(summary, indent=2, sort_keys=True))
+
+
+@app.command("openrouter-list-models")
+def openrouter_list_models(output: Path = typer.Option(...)) -> None:
+    """Fetch OpenRouter model metadata and write selected model configs."""
+    try:
+        models = fetch_openrouter_models(output)
+    except Exception as exc:  # noqa: BLE001
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(f"Wrote {len(models)} OpenRouter model records")
+
+
+@app.command("inspect-leaderboard-input")
+def inspect_leaderboard_input_command(
+    release_dir: Path = typer.Option(...),
+    track: str = typer.Option(...),
+    mode: str = typer.Option(...),
+    output: Path = typer.Option(...),
+) -> None:
+    """Write sanitized leaderboard model inputs for one track and mode."""
+    try:
+        count = inspect_leaderboard_input(release_dir, track, mode, output)
+    except Exception as exc:  # noqa: BLE001
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(f"Wrote {count} sanitized inputs")
+
+
+@app.command("run-openrouter-leaderboard")
+def run_openrouter_leaderboard_command(
+    release_dir: Path = typer.Option(...),
+    models_config: Path = typer.Option(...),
+    output_dir: Path = typer.Option(...),
+    modes: str = typer.Option(...),
+    tracks: str = typer.Option(...),
+    temperature: float = typer.Option(0.0),
+    timeout: int = typer.Option(180),
+    retries: int = typer.Option(2),
+    resume: bool = typer.Option(False),
+    max_concurrency: int = typer.Option(2),
+) -> None:
+    """Run selected OpenRouter models on leaderboard tasks."""
+    try:
+        summary = run_openrouter_leaderboard(
+            release_dir=release_dir,
+            models_config=models_config,
+            output_dir=output_dir,
+            modes=modes,
+            tracks=tracks,
+            temperature=temperature,
+            timeout=timeout,
+            retries=retries,
+            resume=resume,
+            max_concurrency=max_concurrency,
+        )
+    except Exception as exc:  # noqa: BLE001
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(json.dumps(summary, indent=2, sort_keys=True))
+
+
+@app.command("build-leaderboard-page")
+def build_leaderboard_page_command(
+    leaderboard_dir: Path = typer.Option(...),
+) -> None:
+    """Build the static leaderboard page and cleaned chart data."""
+    try:
+        rows = write_static_leaderboard_page(leaderboard_dir)
+    except Exception as exc:  # noqa: BLE001
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(f"Wrote static leaderboard page with {len(rows)} rows")
+
+
+@app.command("finalize-leaderboard")
+def finalize_leaderboard_command(
+    leaderboard_dir: Path = typer.Option(...),
+    release_dir: Optional[Path] = typer.Option(None),
+) -> None:
+    """Finalize leaderboard rows for strict competitive ranking."""
+    try:
+        summary = finalize_strict_leaderboard(leaderboard_dir, release_dir)
+    except Exception as exc:  # noqa: BLE001
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(json.dumps(summary, indent=2, sort_keys=True))
+
+
+@app.command("leaderboard-check")
+def leaderboard_check_command(leaderboard_dir: Path = typer.Option(...)) -> None:
+    """Check that competitive leaderboard rows are clean completed rows."""
+    passed, errors, summary = leaderboard_check(leaderboard_dir)
+    if errors:
+        for error in errors:
+            typer.echo(f"error: {error}", err=True)
+        raise typer.Exit(1)
+    typer.echo(json.dumps({"passed": passed, **summary}, indent=2, sort_keys=True))
+
+
+@app.command("openrouter-retry-failures")
+def openrouter_retry_failures_command(
+    leaderboard_dir: Path = typer.Option(...),
+    release_dir: Path = typer.Option(...),
+    models_config: Path = typer.Option(...),
+    output_dir: Path = typer.Option(...),
+    timeout: int = typer.Option(300),
+    retries: int = typer.Option(5),
+    max_concurrency: int = typer.Option(1),
+    resume: bool = typer.Option(False),
+) -> None:
+    """Retry failed OpenRouter leaderboard predictions."""
+    try:
+        summary = openrouter_retry_failures(
+            leaderboard_dir=leaderboard_dir,
+            release_dir=release_dir,
+            models_config=models_config,
+            output_dir=output_dir,
+            timeout=timeout,
+            retries=retries,
+            max_concurrency=max_concurrency,
+            resume=resume,
+        )
+    except Exception as exc:  # noqa: BLE001
+        typer.echo(f"error: {exc}", err=True)
+        raise typer.Exit(1) from exc
+    typer.echo(json.dumps(summary, indent=2, sort_keys=True))
+    if not summary.get("live_retry_attempted") and summary.get("retry_queue_size"):
+        raise typer.Exit(1)
 
 
 @app.command("fetch-pdb")
