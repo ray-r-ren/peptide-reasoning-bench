@@ -1,6 +1,6 @@
-# Peptide Engineering Benchmark
+# Peptide Reasoning Benchmark
 
-Benchmark and evaluation toolkit for peptide engineering models.
+Benchmark and evaluation toolkit for peptide reasoning models.
 
 ## Quick Start
 
