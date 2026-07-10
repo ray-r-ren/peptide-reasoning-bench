@@ -1,7 +1,7 @@
 # Peptide Reasoning Benchmark
 
-![Peptide Reasoning Benchmark leaderboard Base](pebb.png)
-![Peptide Reasoning Benchmark leaderboard Tool High Reasoning](pebt.png)
+![Peptide Reasoning Benchmark leaderboard Base](PEBB.png)
+![Peptide Reasoning Benchmark leaderboard Tool High Reasoning](PEBT.png)
 
 Benchmark and evaluation toolkit for peptide reasoning models.
 
