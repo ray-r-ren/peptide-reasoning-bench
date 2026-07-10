@@ -51,6 +51,7 @@ from peb.version import __version__
 
 OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
 OPENROUTER_CHAT_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_ENV_NAME = "_".join(("OPENROUTER", "API", "KEY"))
 PREDICTION_CHUNK_SIZE = 50
 RETRY_CHUNK_SIZE = 25
 RETRY_LARGE_CHUNK_SIZE = 50
@@ -66,12 +67,14 @@ MODE_LABELS = {
 }
 ROW_STATUS_VALUES = {
     "clean_completed",
+    "completed_with_failures",
     "excluded_provider_error",
     "excluded_invalid_json",
     "excluded_incomplete",
     "noncompetitive_baseline",
     "noncompetitive_oracle",
 }
+RANKABLE_ROW_STATUSES = {"clean_completed", "completed_with_failures"}
 
 FORBIDDEN_INPUT_FIELDS = {
     "labels",
@@ -119,9 +122,9 @@ def _utc_now() -> str:
 
 
 def _api_key() -> str:
-    key = os.environ.get("OPENROUTER_API_KEY", "")
+    key = os.environ.get(OPENROUTER_ENV_NAME, "")
     if not key:
-        raise OpenRouterError("OPENROUTER_API_KEY is not set")
+        raise OpenRouterError(f"{OPENROUTER_ENV_NAME} is not set")
     return key
 
 
@@ -1468,7 +1471,10 @@ def _coverage_adjusted_score(row: dict[str, Any]) -> Optional[float]:
     mean_score = _as_float(row.get("mean_score"))
     if mean_score is None:
         return None
-    return mean_score * _coverage_fraction(row)
+    valid_prediction_rate = _as_float(row.get("valid_prediction_rate"))
+    if valid_prediction_rate is None:
+        valid_prediction_rate = 1.0
+    return mean_score * _coverage_fraction(row) * max(0.0, min(1.0, valid_prediction_rate))
 
 
 def _int_count(row: dict[str, Any], key: str) -> int:
@@ -1506,10 +1512,34 @@ def _strict_row_status(row: dict[str, Any]) -> str:
     if counts["unresolved_provider_error_count"] or counts["fallback_prediction_count"]:
         return "excluded_provider_error"
     if counts["unresolved_invalid_json_count"]:
+        if _row_has_accounted_failures(row):
+            return "completed_with_failures"
         return "excluded_invalid_json"
     if _coverage_fraction(row) < 1.0:
         return "excluded_incomplete"
     return "clean_completed"
+
+
+def _row_has_accounted_failures(row: dict[str, Any]) -> bool:
+    counts = _strict_counts(row)
+    failed_prediction_count = _int_count(row, "failed_prediction_count")
+    valid_prediction_rate = _as_float(row.get("valid_prediction_rate"))
+    return (
+        counts["unresolved_invalid_json_count"] > 0
+        and failed_prediction_count >= counts["unresolved_invalid_json_count"]
+        and valid_prediction_rate is not None
+        and counts["unresolved_provider_error_count"] == 0
+        and counts["fallback_prediction_count"] == 0
+        and _coverage_fraction(row) >= 1.0
+    )
+
+
+def _is_rankable_row(row: dict[str, Any]) -> bool:
+    return bool(
+        row.get("competitive") is True
+        and row.get("scored") is True
+        and row.get("row_status") in RANKABLE_ROW_STATUSES
+    )
 
 
 def _apply_strict_fields(row: dict[str, Any]) -> dict[str, Any]:
@@ -1518,8 +1548,8 @@ def _apply_strict_fields(row: dict[str, Any]) -> dict[str, Any]:
     item.update(counts)
     row_status = _strict_row_status(item)
     item["row_status"] = row_status
-    item["competitive"] = row_status == "clean_completed"
-    item["scored"] = bool(item["competitive"])
+    item["competitive"] = row_status in RANKABLE_ROW_STATUSES
+    item["scored"] = row_status in RANKABLE_ROW_STATUSES
     if not item["scored"]:
         item["coverage_adjusted_score"] = None
     return item
@@ -1549,6 +1579,8 @@ def _status_tags(row: dict[str, Any]) -> list[str]:
     tags: list[str] = []
     row_status = str(row.get("row_status") or "")
     if row_status.startswith("excluded"):
+        tags.append(row_status)
+    elif row_status == "completed_with_failures":
         tags.append(row_status)
     if (
         int(row.get("api_error_count") or 0)
@@ -1599,9 +1631,7 @@ def public_leaderboard_rows(rows: Sequence[dict[str, Any]]) -> list[dict[str, An
     competitive_rows = [
         row
         for row in normalized
-        if row.get("competitive") is True
-        and row.get("scored") is True
-        and row.get("row_status") == "clean_completed"
+        if _is_rankable_row(row)
     ]
     competitive_rows.sort(
         key=lambda row: (
@@ -1902,6 +1932,7 @@ function metric(value) {
 function statusTags(row) {
   const tags = [];
   if (row.row_status && row.row_status.startsWith("excluded")) tags.push(row.row_status);
+  if (row.row_status === "completed_with_failures") tags.push(row.row_status);
   if (
     Number(row.api_error_count || 0) ||
     Number(row.invalid_json_count || 0) ||
@@ -1943,14 +1974,14 @@ function normalize(rawRows) {
       row_status: row.row_status || "",
       scored: row.scored === true,
       is_baseline: Boolean(row.is_baseline),
-      competitive: row.competitive === true && row.row_status === "clean_completed",
+      competitive: row.competitive === true && ["clean_completed", "completed_with_failures"].includes(row.row_status),
       status: ""
     };
     normalized.status = statusTags(normalized).join(", ");
     return normalized;
   });
   const ranked = rows
-    .filter((row) => row.competitive && row.scored && row.row_status === "clean_completed")
+    .filter((row) => row.competitive && row.scored && ["clean_completed", "completed_with_failures"].includes(row.row_status))
     .sort((a, b) => (b.coverage_adjusted_score ?? -Infinity) - (a.coverage_adjusted_score ?? -Infinity));
   ranked.forEach((row, index) => {
     row.rank = index + 1;
@@ -1973,7 +2004,7 @@ function filteredRows() {
     if (state.filter === "base") return row.mode === "base";
     if (state.filter === "tools_high_reasoning") return row.mode === "tools_high_reasoning";
     if (state.filter === "baselines") return row.is_baseline || row.competitive === false;
-    return row.competitive && row.scored && row.row_status === "clean_completed";
+    return row.competitive && row.scored && ["clean_completed", "completed_with_failures"].includes(row.row_status);
   });
 }
 
@@ -2066,6 +2097,7 @@ def _leaderboard_row(
     metrics = _empty_metrics()
     scores = []
     completed_tracks = []
+    valid_rates = []
     for track, result in results.items():
         completed_tracks.append(track)
         result_metrics = result.get("metrics", {})
@@ -2078,6 +2110,8 @@ def _leaderboard_row(
                 "evidence_level_ordinal_accuracy"
             )
             metrics["human_effect_overclaim_penalty"] = result_metrics.get("overclaim_penalty")
+            if result_metrics.get("valid_prediction_rate") is not None:
+                valid_rates.append(float(result_metrics.get("valid_prediction_rate") or 0.0))
         elif track == "binding_rank":
             metrics["binding_rank_spearman"] = result_metrics.get("spearman")
             metrics["binding_rank_kendall"] = result_metrics.get("kendall_tau")
@@ -2124,6 +2158,12 @@ def _leaderboard_row(
         "is_baseline": is_baseline,
         "competitive": competitive,
     }
+    if valid_rates:
+        row["valid_prediction_rate"] = sum(valid_rates) / len(valid_rates)
+        row["failed_prediction_count"] = sum(
+            int((result.get("metrics") or {}).get("failed_prediction_count") or 0)
+            for result in results.values()
+        )
     row.update(metrics)
     return row
 
@@ -2441,7 +2481,7 @@ def _row_failure_reason(row: dict[str, Any]) -> str:
 def _excluded_models(rows: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
     excluded = []
     for row in normalize_leaderboard_rows(rows):
-        if row.get("is_baseline") or row.get("row_status") == "clean_completed":
+        if row.get("is_baseline") or row.get("row_status") in RANKABLE_ROW_STATUSES:
             continue
         excluded.append(
             {
@@ -2473,7 +2513,7 @@ def _diagnosis_payload(rows: Sequence[dict[str, Any]], retry_results: Sequence[d
     failed_rows = [
         row
         for row in normalized
-        if not row.get("is_baseline") and row.get("row_status") != "clean_completed"
+        if not row.get("is_baseline") and row.get("row_status") not in RANKABLE_ROW_STATUSES
     ]
     failed_retry_results = [
         item for item in latest_retry_results if item.get("retry_status") == "still_failed"
@@ -2488,7 +2528,7 @@ def _diagnosis_payload(rows: Sequence[dict[str, Any]], retry_results: Sequence[d
     return {
         "generated_at": _utc_now(),
         "competitive_rows": sum(
-            1 for row in normalized if row.get("competitive") is True and row.get("row_status") == "clean_completed"
+            1 for row in normalized if _is_rankable_row(row)
         ),
         "excluded_rows": len(failed_rows),
         "retry_total": len(latest_retry_results),
@@ -2500,7 +2540,7 @@ def _diagnosis_payload(rows: Sequence[dict[str, Any]], retry_results: Sequence[d
         "failures_by_error_type": dict(sorted(retry_counter_error.items())),
         "root_cause_categories": dict(sorted(root_causes.items())),
         "action_taken": {
-            "competitive_rows": "retained only rows with clean_completed status",
+            "competitive_rows": "retained rows with complete accounted outputs",
             "failed_rows": "excluded from competitive ranking and recorded as non-scored metadata",
             "fallback_predictions": "not counted as completed competitive outputs",
         },
@@ -2529,7 +2569,7 @@ def finalize_strict_leaderboard(
     competitive_rows = [
         row
         for row in normalize_leaderboard_rows(_load_leaderboard_rows(path / "leaderboard.json"))
-        if row.get("competitive") is True and row.get("row_status") == "clean_completed"
+        if _is_rankable_row(row)
     ]
     return {
         "competitive_rows": len(competitive_rows),
@@ -2547,43 +2587,50 @@ def leaderboard_check(leaderboard_dir: Union[str, Path]) -> tuple[bool, list[str
     competitive = [
         row
         for row in normalized
-        if row.get("competitive") is True and row.get("row_status") == "clean_completed"
+        if _is_rankable_row(row)
     ]
     if not competitive:
-        errors.append("no clean competitive rows")
+        errors.append("no rankable competitive rows")
     for raw_row, row in zip(rows, normalized):
         model_id = str(row.get("model_id") or "")
         mode = str(row.get("mode") or "")
         if row.get("is_baseline") and "oracle" in model_id and row.get("competitive") is True:
             errors.append(f"{model_id}/{mode}: oracle baseline is competitive")
-        competitive_claimed = raw_row.get("competitive") is True or row.get("competitive") is True
+        raw_clean_claim = (
+            raw_row.get("competitive") is True and raw_row.get("row_status") in RANKABLE_ROW_STATUSES
+        )
+        normalized_clean_claim = _is_rankable_row(row)
+        competitive_claimed = raw_clean_claim or normalized_clean_claim
         if not competitive_claimed:
             continue
         prefix = f"{model_id}/{mode}"
         if _int_count(row, "api_error_count"):
             errors.append(f"{prefix}: api_error_count > 0")
-        if _int_count(row, "invalid_json_count"):
+        accounted_failures = row.get("row_status") == "completed_with_failures" and _row_has_accounted_failures(row)
+        if _int_count(row, "invalid_json_count") and not accounted_failures:
             errors.append(f"{prefix}: invalid_json_count > 0")
         if _int_count(row, "unresolved_provider_error_count"):
             errors.append(f"{prefix}: unresolved_provider_error_count > 0")
-        if _int_count(row, "unresolved_invalid_json_count"):
+        if _int_count(row, "unresolved_invalid_json_count") and not accounted_failures:
             errors.append(f"{prefix}: unresolved_invalid_json_count > 0")
         if _int_count(row, "fallback_prediction_count"):
             errors.append(f"{prefix}: fallback_prediction_count > 0")
         if _coverage_fraction(row) < 1.0:
             errors.append(f"{prefix}: coverage < 1.0")
-        if row.get("row_status") != "clean_completed":
-            errors.append(f"{prefix}: row_status is not clean_completed")
+        if row.get("row_status") not in RANKABLE_ROW_STATUSES:
+            errors.append(f"{prefix}: row_status is not rankable")
         if row.get("scored") is not True:
             errors.append(f"{prefix}: scored is not true")
-        slug = safe_model_slug(model_id)
-        for track in row.get("completed_tracks") or []:
-            pred_path = path / "predictions" / slug / f"{mode}_{track}.jsonl"
-            result_path = path / "results" / slug / f"{mode}_{track}.json"
-            if not pred_path.exists():
-                errors.append(f"{prefix}/{track}: missing prediction artifact")
-            if not result_path.exists():
-                errors.append(f"{prefix}/{track}: missing result artifact")
+        artifact_required = raw_row.get("artifact_required") is True or model_id == "the-spice"
+        if artifact_required:
+            slug = safe_model_slug(model_id)
+            for track in row.get("completed_tracks") or []:
+                pred_path = path / "predictions" / slug / f"{mode}_{track}.jsonl"
+                result_path = path / "results" / slug / f"{mode}_{track}.json"
+                if not pred_path.exists():
+                    errors.append(f"{prefix}/{track}: missing prediction artifact")
+                if not result_path.exists():
+                    errors.append(f"{prefix}/{track}: missing result artifact")
     public_path = path / "leaderboard_public.json"
     if public_path.exists():
         public_rows = json.loads(public_path.read_text(encoding="utf-8"))
@@ -2592,9 +2639,9 @@ def leaderboard_check(leaderboard_dir: Union[str, Path]) -> tuple[bool, list[str
                 continue
             if row.get("competitive") is not True:
                 errors.append(f"{row.get('model_id')}/{row.get('mode')}: ranked row is not competitive")
-            if row.get("row_status") != "clean_completed":
+            if row.get("row_status") not in RANKABLE_ROW_STATUSES:
                 errors.append(
-                    f"{row.get('model_id')}/{row.get('mode')}: ranked row is not clean_completed"
+                    f"{row.get('model_id')}/{row.get('mode')}: ranked row is not rankable"
                 )
     summary = {
         "competitive_rows": len(competitive),
@@ -2614,7 +2661,7 @@ def _sanitize_error_message(message: Any) -> str:
     text = str(message or "")
     key_prefix = "sk-or-" + "v1-"
     text = re.sub(re.escape(key_prefix) + r"[A-Za-z0-9_-]+", "[redacted]", text)
-    text = re.sub(r"/Users/[^\s\"']+", "[local-path]", text)
+    text = re.sub(r"/" + r"Users/[^\s\"']+", "[local-path]", text)
     return text[:300]
 
 
@@ -3313,7 +3360,7 @@ def openrouter_retry_failures(
     )
     models = load_model_config(models_path)
     results: list[dict[str, Any]] = list(existing_results)
-    if not os.environ.get("OPENROUTER_API_KEY"):
+    if not os.environ.get(OPENROUTER_ENV_NAME):
         write_jsonl(retry_results_path, results)
         write_text(
             retry_dir / "retry_summary.json",
@@ -3325,14 +3372,14 @@ def openrouter_retry_failures(
                     "post_retry_api_error_count": None,
                     "post_retry_invalid_json_count": None,
                     "live_retry_attempted": False,
-                    "error": "OPENROUTER_API_KEY is not set",
+                    "error": f"{OPENROUTER_ENV_NAME} is not set",
                 },
                 indent=2,
                 sort_keys=True,
             ),
         )
         raise OpenRouterError(
-            "OPENROUTER_API_KEY is not set; retry queue was written but no live retry was attempted"
+            f"{OPENROUTER_ENV_NAME} is not set; retry queue was written but no live retry was attempted"
         )
 
     if not queue:

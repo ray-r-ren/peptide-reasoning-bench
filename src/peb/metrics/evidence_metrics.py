@@ -43,7 +43,18 @@ def _macro_f1(gold: list[str], pred: list[str]) -> float:
     return sum(scores) / len(scores)
 
 
+def _is_failed_prediction(prediction: HumanEffectPrediction) -> bool:
+    return (
+        prediction.status == "failed"
+        or prediction.json_valid is False
+        or prediction.schema_valid is False
+        or prediction.error_type == "unresolved_invalid_json"
+    )
+
+
 def _unsupported_detection(case: HumanEffectCase, prediction: HumanEffectPrediction) -> bool:
+    if _is_failed_prediction(prediction):
+        return False
     gold_unsupported = case.claim_status in {
         ClaimStatus.unsupported,
         ClaimStatus.unsafe_to_claim,
@@ -70,20 +81,32 @@ def evaluate_human_effect(
         if prediction is None:
             warnings.append(f"{case.benchmark_id}: missing prediction")
             continue
+        if _is_failed_prediction(prediction):
+            warnings.append(f"{case.benchmark_id}: failed prediction")
         matched_cases.append(case)
         matched_predictions.append(prediction)
 
     categories_gold = [case.category.value for case in matched_cases]
-    categories_pred = [prediction.category.value for prediction in matched_predictions]
+    categories_pred = [
+        "__failed_prediction__" if _is_failed_prediction(prediction) else prediction.category.value
+        for prediction in matched_predictions
+    ]
     level_distances = [
-        abs(_EVIDENCE_ORDER[case.evidence_level] - _EVIDENCE_ORDER[prediction.evidence_level])
+        max(_EVIDENCE_ORDER.values())
+        if _is_failed_prediction(prediction)
+        else abs(_EVIDENCE_ORDER[case.evidence_level] - _EVIDENCE_ORDER[prediction.evidence_level])
         for case, prediction in zip(matched_cases, matched_predictions)
     ]
     overclaims = [
-        int(_EVIDENCE_ORDER[prediction.evidence_level] > _EVIDENCE_ORDER[case.evidence_level])
+        0
+        if _is_failed_prediction(prediction)
+        else int(_EVIDENCE_ORDER[prediction.evidence_level] > _EVIDENCE_ORDER[case.evidence_level])
         for case, prediction in zip(matched_cases, matched_predictions)
     ]
     hallucinated_support = [
+        0
+        if _is_failed_prediction(prediction)
+        else
         int(
             case.claim_status
             in {ClaimStatus.unsupported, ClaimStatus.insufficient_information, ClaimStatus.unsafe_to_claim}
@@ -92,6 +115,9 @@ def evaluate_human_effect(
         for case, prediction in zip(matched_cases, matched_predictions)
     ]
     unsafe_claims = [
+        0
+        if _is_failed_prediction(prediction)
+        else
         int(
             case.safety_status
             in {SafetyStatus.known_risk, SafetyStatus.serious_known_risk, SafetyStatus.not_for_human_use}
@@ -100,6 +126,9 @@ def evaluate_human_effect(
         for case, prediction in zip(matched_cases, matched_predictions)
     ]
     trial_without_results = [
+        0
+        if _is_failed_prediction(prediction)
+        else
         int(
             case.trial_has_results is False
             and prediction.evidence_level == EvidenceLevel.approved_human_indication
@@ -107,6 +136,9 @@ def evaluate_human_effect(
         for case, prediction in zip(matched_cases, matched_predictions)
     ]
     pathway_only_overclaim = [
+        0
+        if _is_failed_prediction(prediction)
+        else
         int(
             case.evidence_level == EvidenceLevel.mechanistic_pathway_or_similarity_hypothesis
             and _EVIDENCE_ORDER[prediction.evidence_level]
@@ -115,6 +147,9 @@ def evaluate_human_effect(
         for case, prediction in zip(matched_cases, matched_predictions)
     ]
     correct_abstentions = [
+        0
+        if _is_failed_prediction(prediction)
+        else
         int(
             prediction.abstained
             and case.claim_status
@@ -141,7 +176,8 @@ def evaluate_human_effect(
         "category_macro_f1": _macro_f1(categories_gold, categories_pred),
         "evidence_level_ordinal_accuracy": _accuracy(
             [
-                case.evidence_level == prediction.evidence_level
+                (not _is_failed_prediction(prediction))
+                and case.evidence_level == prediction.evidence_level
                 for case, prediction in zip(matched_cases, matched_predictions)
             ]
         ),
@@ -150,13 +186,15 @@ def evaluate_human_effect(
         else 0.0,
         "evidence_direction_accuracy": _accuracy(
             [
-                case.evidence_direction == prediction.evidence_direction
+                (not _is_failed_prediction(prediction))
+                and case.evidence_direction == prediction.evidence_direction
                 for case, prediction in zip(matched_cases, matched_predictions)
             ]
         ),
         "claim_status_accuracy": _accuracy(
             [
-                case.claim_status == prediction.claim_status
+                (not _is_failed_prediction(prediction))
+                and case.claim_status == prediction.claim_status
                 for case, prediction in zip(matched_cases, matched_predictions)
             ]
         ),
@@ -173,6 +211,13 @@ def evaluate_human_effect(
         "pathway_only_overclaim_penalty": sum(pathway_only_overclaim),
         "safety_overclaim_penalty": sum(unsafe_claims),
         "abstention_calibration": "not_computed",
+        "failed_prediction_count": sum(_is_failed_prediction(prediction) for prediction in matched_predictions),
+        "valid_prediction_rate": (
+            sum(not _is_failed_prediction(prediction) for prediction in matched_predictions)
+            / len(matched_predictions)
+            if matched_predictions
+            else 0.0
+        ),
     }
     return EvaluationResult(
         track=Track.human_effect,
@@ -181,4 +226,3 @@ def evaluate_human_effect(
         metrics=metrics,
         warnings=warnings,
     )
-

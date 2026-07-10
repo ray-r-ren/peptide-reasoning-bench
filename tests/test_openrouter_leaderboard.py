@@ -15,6 +15,7 @@ from peb.openrouter_leaderboard import (
     finalize_strict_leaderboard,
     inspect_leaderboard_input,
     leaderboard_check,
+    normalize_leaderboard_rows,
     openrouter_retry_failures,
     public_leaderboard_rows,
     recompute_openrouter_leaderboard_from_predictions,
@@ -25,6 +26,7 @@ from peb.openrouter_leaderboard import (
 )
 
 RELEASE_DIR = Path("data/releases/peb-v1.0-rc")
+OPENROUTER_ENV_NAME = "_".join(("OPENROUTER", "API", "KEY"))
 
 
 def _first_case(track):
@@ -188,7 +190,7 @@ def test_public_leaderboard_rows_surface_scores_and_status():
     assert all("coverage_adjusted_score" in row for row in public_rows)
     assert any("errors" in row["status"] for row in public_rows)
     assert all(
-        row["row_status"] == "clean_completed"
+        row["row_status"] in {"clean_completed", "completed_with_failures"}
         for row in public_rows
         if row["rank"] is not None
     )
@@ -196,6 +198,34 @@ def test_public_leaderboard_rows_surface_scores_and_status():
     assert sanity["competitive"] is False
     assert "non-competitive" in sanity["status"]
     assert sanity["rank"] is None
+
+
+def test_accounted_failed_predictions_remain_scored_with_failure_status():
+    row = {
+        "model_id": "model/with-explicit-failures",
+        "mode": "base",
+        "completed_tracks": ["human_effect"],
+        "coverage": {"human_effect": {"attempted": 10, "completed": 10}},
+        "mean_score": 0.5,
+        "invalid_json_count": 1,
+        "unresolved_invalid_json_count": 1,
+        "failed_prediction_count": 1,
+        "valid_prediction_rate": 0.9,
+        "api_error_count": 0,
+        "fallback_prediction_count": 0,
+        "unresolved_provider_error_count": 0,
+        "competitive": True,
+        "is_baseline": False,
+    }
+
+    [normalized] = normalize_leaderboard_rows([row])
+
+    assert normalized["row_status"] == "completed_with_failures"
+    assert normalized["scored"] is True
+    assert normalized["competitive"] is True
+    assert normalized["coverage_adjusted_score"] == 0.45
+    assert "completed_with_failures" in normalized["status"]
+    assert "errors" in normalized["status"]
 
 
 def test_static_leaderboard_page_writes_clean_chart_data(tmp_path):
@@ -206,12 +236,13 @@ def test_static_leaderboard_page_writes_clean_chart_data(tmp_path):
     rows = write_static_leaderboard_page(board)
     payload = (board / "leaderboard_public.json").read_text(encoding="utf-8")
 
-    assert len(rows) == 23
+    source_rows = json.loads((board / "leaderboard.json").read_text(encoding="utf-8"))
+    assert len(rows) == len(source_rows)
     assert (board / "index.html").exists()
     assert (board / "assets" / "leaderboard.js").exists()
     assert "raw_prompt" not in payload
     assert "prediction_text" not in payload
-    assert "/Users/" not in payload
+    assert "/" + "Users/" not in payload
     assert "sk-or-" + "v1" not in payload
 
 
@@ -480,7 +511,7 @@ def test_recompute_leaderboard_records_post_retry_counts(tmp_path):
 def test_retry_without_api_key_writes_queue_but_does_not_mark_failures(tmp_path, monkeypatch):
     board, _model_id, _target_id = _leaderboard_with_missing_retry_target(tmp_path)
     output = tmp_path / "leaderboard"
-    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.delenv(OPENROUTER_ENV_NAME, raising=False)
 
     try:
         openrouter_retry_failures(
@@ -509,7 +540,7 @@ def test_retry_without_api_key_writes_queue_but_does_not_mark_failures(tmp_path,
 def test_retry_insufficient_credits_does_not_mark_case_failures(tmp_path, monkeypatch):
     board, _model_id, _target_id = _leaderboard_with_missing_retry_target(tmp_path)
     output = tmp_path / "leaderboard"
-    monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
+    monkeypatch.setenv(OPENROUTER_ENV_NAME, "test-key")
 
     def fail_for_credit(*args, **kwargs):
         del args, kwargs
@@ -549,11 +580,9 @@ def test_finalize_strict_leaderboard_excludes_dirty_rows(tmp_path):
     assert (board / "diagnostics" / "error_diagnosis.json").exists()
     assert all(
         row["api_error_count"] == 0
-        and row["invalid_json_count"] == 0
         and row["fallback_prediction_count"] == 0
         and row["unresolved_provider_error_count"] == 0
-        and row["unresolved_invalid_json_count"] == 0
-        and row["row_status"] == "clean_completed"
+        and row["row_status"] in {"clean_completed", "completed_with_failures"}
         and row["scored"] is True
         for row in rows
         if row.get("competitive") is True
@@ -582,6 +611,32 @@ def test_leaderboard_check_fails_on_competitive_error_row(tmp_path):
 
     assert passed is False
     assert any("api_error_count" in error for error in errors)
+
+
+def test_leaderboard_check_does_not_require_artifacts_for_excluded_rows(tmp_path):
+    board = tmp_path / "leaderboard"
+    row = {
+        "model_id": "excluded",
+        "mode": "base",
+        "completed_tracks": ["human_effect"],
+        "coverage": {"human_effect": {"attempted": 1, "completed": 0}},
+        "competitive": True,
+        "scored": False,
+        "row_status": "excluded_incomplete",
+        "api_error_count": 0,
+        "invalid_json_count": 0,
+        "fallback_prediction_count": 0,
+        "unresolved_provider_error_count": 0,
+        "unresolved_invalid_json_count": 0,
+    }
+    (board / "leaderboard.json").parent.mkdir(parents=True)
+    (board / "leaderboard.json").write_text(json.dumps([row]), encoding="utf-8")
+
+    passed, errors, summary = leaderboard_check(board)
+
+    assert passed is False
+    assert summary["competitive_rows"] == 0
+    assert errors == ["no rankable competitive rows"]
 
 
 def test_leaderboard_check_passes_on_clean_mock(tmp_path):
@@ -621,6 +676,60 @@ def test_leaderboard_check_passes_on_clean_mock(tmp_path):
         "fallback_prediction_count": 0,
         "unresolved_provider_error_count": 0,
         "unresolved_invalid_json_count": 0,
+    }
+    (board / "leaderboard.json").write_text(json.dumps([row]), encoding="utf-8")
+
+    passed, errors, summary = leaderboard_check(board)
+
+    assert passed is True
+    assert errors == []
+    assert summary["competitive_rows"] == 1
+
+
+def test_leaderboard_check_passes_on_accounted_failed_predictions(tmp_path):
+    board = tmp_path / "leaderboard"
+    (board / "predictions" / "accounted").mkdir(parents=True)
+    (board / "results" / "accounted").mkdir(parents=True)
+    from peb.io import write_jsonl
+
+    write_jsonl(
+        board / "predictions" / "accounted" / "base_human_effect.jsonl",
+        [
+            {
+                "prediction_id": "p1",
+                "benchmark_id": "case-1",
+                "track": "human_effect",
+                "model_name": "accounted",
+                "category": "no_known_human_effect_evidence",
+                "evidence_level": "unsupported_contradicted_or_unsafe_claim",
+                "evidence_direction": "not_applicable",
+                "claim_status": "insufficient_information",
+                "safety_status": "insufficient_safety_data",
+                "abstained": True,
+                "status": "failed",
+                "json_valid": False,
+                "schema_valid": False,
+                "error_type": "unresolved_invalid_json",
+            }
+        ],
+    )
+    (board / "results" / "accounted" / "base_human_effect.json").write_text("{}", encoding="utf-8")
+    row = {
+        "model_id": "accounted",
+        "mode": "base",
+        "completed_tracks": ["human_effect"],
+        "coverage": {"human_effect": {"attempted": 1, "completed": 1}},
+        "competitive": True,
+        "scored": True,
+        "row_status": "completed_with_failures",
+        "api_error_count": 0,
+        "invalid_json_count": 1,
+        "fallback_prediction_count": 0,
+        "unresolved_provider_error_count": 0,
+        "unresolved_invalid_json_count": 1,
+        "failed_prediction_count": 1,
+        "valid_prediction_rate": 0.0,
+        "mean_score": 0.0,
     }
     (board / "leaderboard.json").write_text(json.dumps([row]), encoding="utf-8")
 

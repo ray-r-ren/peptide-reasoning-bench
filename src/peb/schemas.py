@@ -364,6 +364,11 @@ class PredictionBase(StrictModel):
     benchmark_id: str
     track: Track
     model_name: str = "unspecified"
+    status: Optional[str] = None
+    json_valid: Optional[bool] = None
+    schema_valid: Optional[bool] = None
+    error_type: Optional[str] = None
+    error_message: Optional[str] = None
 
 
 class StructurePrediction(PredictionBase):

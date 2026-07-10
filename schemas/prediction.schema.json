@@ -7,6 +7,42 @@
           "title": "Benchmark Id",
           "type": "string"
         },
+        "error_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Message"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
+        "json_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Json Valid"
+        },
         "model_name": {
           "default": "unspecified",
           "title": "Model Name",
@@ -16,6 +52,18 @@
           "title": "Prediction Id",
           "type": "string"
         },
+        "schema_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Valid"
+        },
         "scores": {
           "items": {
             "$ref": "#/$defs/BindingRankScore"
@@ -23,6 +71,18 @@
           "minItems": 1,
           "title": "Scores",
           "type": "array"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
         },
         "track": {
           "const": "binding_rank",
@@ -208,11 +268,47 @@
         "claim_status": {
           "$ref": "#/$defs/ClaimStatus"
         },
+        "error_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Message"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
         "evidence_direction": {
           "$ref": "#/$defs/EvidenceDirection"
         },
         "evidence_level": {
           "$ref": "#/$defs/EvidenceLevel"
+        },
+        "json_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Json Valid"
         },
         "model_name": {
           "default": "unspecified",
@@ -232,6 +328,30 @@
         },
         "safety_status": {
           "$ref": "#/$defs/SafetyStatus"
+        },
+        "schema_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Valid"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
         },
         "track": {
           "const": "human_effect",
@@ -279,6 +399,42 @@
           "default": null,
           "title": "Clash Score"
         },
+        "error_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Message"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
+        "json_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Json Valid"
+        },
         "model_name": {
           "default": "unspecified",
           "title": "Model Name",
@@ -306,6 +462,30 @@
         "prediction_id": {
           "title": "Prediction Id",
           "type": "string"
+        },
+        "schema_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Valid"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
         },
         "track": {
           "const": "pose",
@@ -360,6 +540,42 @@
           "title": "Coordinates",
           "type": "array"
         },
+        "error_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Message"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
+        "json_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Json Valid"
+        },
         "model_name": {
           "default": "unspecified",
           "title": "Model Name",
@@ -368,6 +584,30 @@
         "prediction_id": {
           "title": "Prediction Id",
           "type": "string"
+        },
+        "schema_valid": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Valid"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
         },
         "track": {
           "const": "structure",
