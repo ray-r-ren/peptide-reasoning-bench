@@ -1,5 +1,7 @@
 # Peptide Reasoning Benchmark
 
+[![HF Downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fhuggingface.co%2Fapi%2Fdatasets%2FForsy-AI%2Fagent-apprenticeship-seed-dataset_v0.2&query=%24.downloads&label=HF%20downloads&logo=huggingface&color=yellow)](https://huggingface.co/datasets/rayrren/peptide-reasoning-benchmark)
+
 ![Peptide Reasoning Benchmark leaderboard Base](PEBB.png)
 ![Peptide Reasoning Benchmark leaderboard Tool High Reasoning](PEBT.png)
 
